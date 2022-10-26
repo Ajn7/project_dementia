@@ -17,22 +17,22 @@ def symptom_list(request):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)   
-# @api_view(['GET','PUT','DELETE'])
-# def movie_details(request,pk):
-#     if request.method == 'GET':
-#         movie=Movie.objects.get(pk=pk)
-#         serializer=symptomserlizer(movie)
-#         return Response(serializer.data)   
-#     if request.method == 'PUT':
-#         movie=Movie.objects.get(pk=pk)
-#         serializer=symptomserlizer(movie,data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.errors) 
+@api_view(['GET','PUT','DELETE'])
+def symptom_details(request,pk):
+    if request.method == 'GET':
+        symptom=symptoms.objects.get(pk=pk)
+        serializer=SymptomSerlizer(symptom)
+        return Response(serializer.data)   
+    if request.method == 'PUT':
+        symptom=symptoms.objects.get(pk=pk)
+        serializer=SymptomSerlizer(symptom,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors) 
                     
-#     if request.method == 'DELETE':
-#         movie=Movie.objects.get(pk=pk)
-#         movie.delete()
+    if request.method == 'DELETE':
+        symptom=symptom.objects.get(pk=pk)
+        symptom.delete()
        
