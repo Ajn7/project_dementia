@@ -3,13 +3,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from dementia.api.serializers import SymptomSerlizer
 from dementia.models import symptoms
+from django.http import Http404
+
 
 @api_view(['GET', 'POST'])
 def symptom_list(request):
     if request.method == 'GET':
-     symptom=symptoms.objects.all()
-     serializer=SymptomSerlizer(symptom,many=True)
-     return Response(serializer.data)
+        symptom=symptoms.objects.all()
+        serializer=SymptomSerlizer(symptom,many=True)
+        return Response(serializer.data)       
     if request.method == 'POST':
         serializer=SymptomSerlizer(data=request.data)
         if serializer.is_valid():
@@ -20,9 +22,14 @@ def symptom_list(request):
 @api_view(['GET','PUT','DELETE'])
 def symptom_details(request,pk):
     if request.method == 'GET':
-        symptom=symptoms.objects.get(pk=pk)
-        serializer=SymptomSerlizer(symptom)
-        return Response(serializer.data)   
+        try:
+            symptom=symptoms.objects.get(pk=pk)
+            serializer=SymptomSerlizer(symptom)
+        except symptoms.DoesNotExist:
+            raise Http404("id does not exist")  
+        return Response(serializer.data)
+       
+              
     if request.method == 'PUT':
         symptom=symptoms.objects.get(pk=pk)
         serializer=SymptomSerlizer(symptom,data=request.data)
