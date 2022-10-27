@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from dementia.api.serializers import SymptomSerlizer
 from dementia.models import symptoms
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 
 @api_view(['GET', 'POST'])
@@ -42,4 +42,5 @@ def symptom_details(request,pk):
     if request.method == 'DELETE':
         symptom=symptom.objects.get(pk=pk)
         symptom.delete()
+        return JsonResponse({'item':'Deleted'})
        

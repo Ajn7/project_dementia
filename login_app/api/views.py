@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from login_app.api.serializers import UserSerlizer
 from login_app.models import auth_user
 
+#function based view
 @api_view(['GET', 'POST'])
 def user_list(request):
     if request.method == 'GET':
