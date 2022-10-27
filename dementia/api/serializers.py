@@ -7,7 +7,7 @@ class SymptomSerlizer(serializers.Serializer):
     title=serializers.CharField()
     description=serializers.CharField(style={'base_template':'textarea.html'})
     details=serializers.CharField(style={'base_template':'textarea.html'})
-    created=serializers.DateTimeField(read_only=True)
+    #created=serializers.DateTimeField(read_only=True)
     
     
     def create(self,validated_data):
