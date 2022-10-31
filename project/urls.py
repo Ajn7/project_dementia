@@ -17,7 +17,10 @@ from django.contrib import admin
 from django.urls import path,include
 
 urlpatterns = [
+    
     path('admin/', admin.site.urls),
-     path('accounts/', include('login_app.api.urls')),
-     path('symptom/', include('dementia.api.urls')),
+    path('accounts/', include('login_app.api.urls')),
+    path('symptom/', include('dementia.api.urls')),
+    path('question/',include('dementia.quesapi.urls')),
+     path('api-auth',include('rest_framework.urls'))
 ]

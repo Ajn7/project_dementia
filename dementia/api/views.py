@@ -1,46 +1,39 @@
 
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from dementia.api.serializers import SymptomSerlizer
+from rest_framework import generics
+from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
+
 from dementia.models import symptoms
-from django.http import Http404, JsonResponse
+from dementia.api.serializers import SymptomSerializer
 
 
-@api_view(['GET', 'POST'])
-def symptom_list(request):
-    if request.method == 'GET':
-        symptom=symptoms.objects.all()
-        serializer=SymptomSerlizer(symptom,many=True)
-        return Response(serializer.data)       
-    if request.method == 'POST':
-        serializer=SymptomSerlizer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)   
-@api_view(['GET','PUT','DELETE'])
-def symptom_details(request,pk):
-    if request.method == 'GET':
-        try:
-            symptom=symptoms.objects.get(pk=pk)
-            serializer=SymptomSerlizer(symptom)
-        except symptoms.DoesNotExist:
-            raise Http404("id does not exist")  
-        return Response(serializer.data)
-       
-              
-    if request.method == 'PUT':
-        symptom=symptoms.objects.get(pk=pk)
-        serializer=SymptomSerlizer(symptom,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors) 
-                    
-    if request.method == 'DELETE':
-        symptom=symptom.objects.get(pk=pk)
-        symptom.delete()
-        return JsonResponse({'item':'Deleted'})
-       
+#concrete view class v-5/18
+
+#lists all symptoms and create symptom
+class symptom_list_all(generics.ListAPIView):
+    queryset = symptoms.objects.all()
+    serializer_class =SymptomSerializer
+    
+class symptom_Create(generics.CreateAPIView):
+    queryset = symptoms.objects.all()
+    serializer_class =SymptomSerializer
+    permission_classes=[IsAuthenticated]
+    
+    
+#update 
+class symptom_details(generics.RetrieveUpdateDestroyAPIView):
+    queryset = symptoms.objects.all()
+    serializer_class =SymptomSerializer
+    permission_classes=[IsAuthenticated]
+
+#symptoms of paricular user and a valid user can add symptoms
+class SymptomList(generics.ListCreateAPIView):
+    queryset = symptoms.objects.all()
+    serializer_class =SymptomSerializer
+    
+    def get_queryset(self):
+        pk=self.kwargs['pk']
+        return symptoms.objects.filter(username=pk) 
+    
+    permission_classes=[IsAuthenticated]
