@@ -22,5 +22,7 @@ urlpatterns = [
     path('accounts/', include('login_app.api.urls')),
     path('symptom/', include('dementia.api.urls')),
     path('question/',include('dementia.quesapi.urls')),
-     path('api-auth',include('rest_framework.urls'))
+    #path('api-auth',include('rest_framework.urls')),
+    path('accounts/', include('user_app.api.urls')),
+     
 ]
