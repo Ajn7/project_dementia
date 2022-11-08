@@ -21,8 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if User.objects.filter(email=self.validated_data['email']).exists():
             raise serializers.ValidationError({'error':'email already exists'})
         
-        # if User.objects.filter(username=self.cleaned_data['username']).exists():
-        #     raise serializers.ValidationError({'error':'username already exists'})
+        # uniquness of username is checked default by Django
     
         if password!= password2:
             raise serializers.ValidationError({'error':'Password1 and Password2 must be same'})
