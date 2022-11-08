@@ -2,6 +2,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework import permissions
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 from user_app import models #importing token signals
 from user_app.api.serializers import RegistrationSerializer
@@ -37,5 +41,26 @@ def registration_view(request):
              
         return Response(data)  
 
-            
+@api_view(['POST'])
+def deleteaccount_view(request):
+    #permission_classes = [permissions.IsAuthenticated]
+    if request.method == 'POST':
+        username=request.POST["username"]
+        password=request.POST["password"]
+        #user =authenticate(username=username, password=password)
+        try:
+            user=User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"response":"User does not exist."})
+        # if  user is None: not working 
+        #     return Response({"response":"User does not exist."}) 
+        if not user.check_password(password):
+            return Response({"response":"incorrect Password"})
+        
+        user.delete()
+        return Response({"result":"user deleted successfully"}) 
+       
+    
+        
+                 
     
